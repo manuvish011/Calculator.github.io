@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Calculator - Muskan Beauty Touch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212; /* Dark background color */
+            color: #ffffff; /* Light text color */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header h1 {
+            font-size: 24px; /* Decreased font size */
+            color: #ff6666;
+            margin: 10px 0; /* Increased margin for spacing */
+        }
+        .input-row {
+            margin-bottom: 20px;
+        }
+        .input-row label {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .input-row input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #333333; /* Lighter border color */
+            font-size: 16px;
+            background-color: #333333; /* Dark background color */
+            color: #ffffff; /* Light text color */
+        }
+        .btn {
+            width: 100%;
+            padding: 12px 0; /* Adjusted padding for mobile */
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: #ff6666;
+            color: #ffffff; /* White text color */
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #ff4d4d; /* Darker background color on hover */
+        }
+        .list-box {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #333333;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            background-color: #333333; /* Dark background color */
+            color: #ffffff; /* Light text color */
+        }
+        .total-label {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .button-group button {
+            margin-bottom: 10px;
+            flex-basis: calc(50% - 10px);
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            header h1 {
+                font-size: 20px; /* Decreased font size for smaller screens */
+            }
+            .btn {
+                padding: 10px 0; /* Adjusted padding for smaller screens */
+                font-size: 14px; /* Decreased font size for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Muskan Beauty Touch</h1>
+        </header>
+        <div class="input-row">
+            <label for="price">Price:</label>
+            <input type="number" id="price" inputmode="numeric" pattern="[0-9]*" class="form-control">
+        </div>
+        <div class="input-row">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" inputmode="numeric" pattern="[0-9]*" class="form-control">
+        </div>
+        <button class="btn btn-primary" onclick="addItem()">Add Item</button>
+        <div class="list-box" id="itemList"></div>
+        <div class="total-label">Subtotal: ₹<span id="subtotal">0.00</span></div>
+        <div class="total-label">Total: ₹<span id="total">0.00</span></div>
+        <div class="total-label">Discount: ₹<span id="discount">0.00</span></div>
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="clearList()">Clear List</button>
+            <button class="btn btn-primary" onclick="printBill()">Print Bill</button>
+            <button class="btn btn-primary" onclick="calculateChange()">Calculate Change</button>
+            <button class="btn btn-primary" onclick="applyDiscount()">Apply Discount</button>
+        </div>
+    </div>
+    <script>
+        // JavaScript code remains unchanged
+    </script>
+</body>
+</html>
+
+    <script>
+        let items = [];
+        let total = 0;
+        let discountAmount = 0;
+
+        function addItem() {
+            let priceInput = document.getElementById('price');
+            let quantityInput = document.getElementById('quantity');
+            
+            let price = parseFloat(priceInput.value);
+            let quantity = parseInt(quantityInput.value);
+            
+            if (!isNaN(price) && !isNaN(quantity)) {
+                let total_price = price * quantity;
+                items.push({ price: price, quantity: quantity, total_price: total_price });
+                updateTotals();
+                updateItemList(); // Update bill preview
+                priceInput.value = '';
+                quantityInput.value = '';
+                
+                // Focus back on one of the input fields to prevent the num pad from closing
+                priceInput.focus();
+            } else {
+                alert('Invalid input for price or quantity.');
+            }
+        }
+
+        function updateTotals() {
+            total = 0;
+            items.forEach(item => {
+                total += item.total_price;
+            });
+
+            let discountedTotal = total - discountAmount; // Adjusted total with discount
+
+            document.getElementById('subtotal').textContent = ₹${total.toFixed(2)};
+            document.getElementById('discount').textContent = ₹${discountAmount.toFixed(2)};
+            document.getElementById('total').textContent = ₹${discountedTotal.toFixed(2)}; // Include discount in total calculation
+        }
+
+        function updateItemList() {
+            let itemList = document.getElementById('itemList');
+            itemList.innerHTML = ''; // Clear previous content
+            let billContent = "<table class='bill-table'>";
+            billContent += "<thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th></tr></thead>";
+            billContent += "<tbody>";
+            items.forEach((item, index) => {
+                billContent += "<tr>";
+                billContent += <td>Product ${index + 1}</td>;
+                billContent += <td><input type="number" value="${item.price.toFixed(2)}" onchange="updateItemPrice(${index}, this.value)" class="form-control"></td>;
+                billContent += <td><input type="number" value="${item.quantity}" onchange="updateItemQuantity(${index}, this.value)" class="form-control"></td>;
+                billContent += <td>₹${item.total_price.toFixed(2)}</td>;
+                billContent += "</tr>";
+            });
+            billContent += "</tbody></table>";
+
+            // Displaying bill content in the item list
+            itemList.innerHTML = billContent;
+        }
+
+        function clearList() {
+            items = [];
+            total = 0;
+            discountAmount = 0; // Reset discount amount
+            document.getElementById('subtotal').textContent = '₹0.00';
+            document.getElementById('total').textContent = '₹0.00';
+            document.getElementById('discount').textContent = '₹0.00'; // Reset discount display
+            updateItemList(); // Clear bill preview
+        }
+
+function printBill() {
+    let billContent = `
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        color: #000;
+        font-size: 24px; /* Base font size adjusted for better readability */
+    }
+    .container {
+        width: 90%; /* Adjusted width to ensure the container stays within the frame */
+        margin: 0 auto;
+        padding: 10mm; /* Adjusted padding for better layout */
+        border: 2px solid #000; /* Adding a border to the container */
+        border-radius: 10px; /* Rounded corners for the container */
+        text-align: center; /* Center aligning the entire bill receipt */
+    }
+    .header {
+        margin-bottom: 20px; /* Increased margin for better separation */
+    }
+    .header h1 {
+        margin: 0;
+        font-size: 48px; /* Increased font size for the header */
+        color: #000; /* Setting header color to black */
+        font-weight: bold; /* Making the font bold for better visibility */
+    }
+    .section {
+        margin-bottom: 20px;
+        text-align: Center; /* Aligning the text of section headers and item list to the left */
+    }
+    .section-header {
+        font-size: 32px; /* Increased font size for the section headers for better visibility */
+        margin-bottom: 15px; /* Increased margin for better separation */
+        font-weight: bold; /* Making the font bold for better visibility */
+        color: #000; /* Setting section header color to black */
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+    }
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #000;
+        font-size: 24px; /* Increased font size for table cells for better readability */
+        font-weight: bold; /* Making the font bold for better visibility */
+        text-align: center; /* Center aligning the content of table cells */
+    }
+    th {
+        background-color: #f2f2f2;
+        color: #000;
+    }
+    .total-label {
+        font-size: 28px; /* Increased font size for the total labels for better visibility */
+        margin-bottom: 10px; /* Increased margin for better separation */
+        font-weight: bold; /* Making the font bold for better visibility */
+        text-align: left; /* Aligning the total amount to the left */
+   
+}
+</style>
+        <div class="container">
+            <div class="header">
+                <h1>Muskan Beauty Touch</h1>
+            </div>
+            <div class="section">
+                <div class="section-header">Items</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+
+    items.forEach((item, index) => {
+        billContent += `
+            <tr>
+                <td>Product ${index + 1}</td>
+                <td>₹${item.price.toFixed(2)}</td>
+                <td>${item.quantity}</td>
+                <td>₹${item.total_price.toFixed(2)}</td>
+            </tr>
+        `;
+    });
+
+    let subtotal = total.toFixed(2);
+    let discountDisplay = discountAmount.toFixed(2);
+    let discountedTotal = total - discountAmount;
+    billContent += `
+                    </tbody>
+                </table>
+            </div>
+            <div class="section">
+                <div class="section-header">Total</div>
+                <div class="total-label">Subtotal: ₹${subtotal}</div>
+                <div class="total-label">Discount: ₹${discountDisplay}</div>
+                <div class="total-label">Total: ₹${discountedTotal.toFixed(2)}</div>
+            </div>
+        </div>
+    `;
+
+    function printBill() {
+        let billContent = document.getElementById('itemList').innerHTML;
+        const shareData = {
+            title: 'Bill Receipt',
+            text: 'Please find the attached bill receipt.',
+            files: [new Blob([billContent], {type: 'text/html'})]
+        };
+
+        if (navigator.canShare && navigator.canShare(shareData)) {
+            navigator.share(shareData)
+                .then(() => console.log('Share was successful.'))
+                .catch((error) => console.log('Sharing failed', error));
+        } else {
+            console.log(`Your system doesn't support sharing files.`);
+        }
+    }
+  
+        function calculateChange() {
+            let amountPaid = parseFloat(prompt('Enter amount paid:'));
+            if (!isNaN(amountPaid)) {
+                let change = amountPaid - (total - discountAmount); // Adjusted to include discount
+                alert(Change due: ₹${change.toFixed(2)});
+            } else {
+                alert('Invalid input for amount paid.');
+            }
+        }
+
+        function applyDiscount() {
+            let discountPercentage = parseFloat(prompt('Enter discount percentage:'));
+            if (!isNaN(discountPercentage)) {
+                discountAmount = total * (discountPercentage / 100); // Updated to store discount amount
+                updateTotals(); // This will trigger the bill update
+                
+                // Display discount with percentage in front of the discount amount
+                document.getElementById('discount').textContent = ₹${discountAmount.toFixed(2)} (${discountPercentage}%);
+            } else {
+                alert('Invalid input for discount percentage.');
+            }
+        }
+
+        function updateItemPrice(index, price) {
+            items[index].price = parseFloat(price);
+            items[index].total_price = items[index].price * items[index].quantity;
+            updateTotals();
+            updateItemList(); // Update bill preview after updating the item
+        }
+
+        function updateItemQuantity(index, quantity) {
+            items[index].quantity = parseInt(quantity);
+            items[index].total_price = items[index].price * items[index].quantity;
+            updateTotals();
+            updateItemList(); // Update bill preview after updating the item
+        }
+    </script>
+</body>
+</html>
