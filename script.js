@@ -75,55 +75,48 @@ function printBill() {
             padding: 0;
             background-color: #fff;
             color: #000;
-            font-size: 24px;
+            font-size: 36px;
         }
         .container {
             width: 90%;
             margin: 0 auto;
-            padding: 10mm;
-            border: 2px solid #000;
-            border-radius: 10px;
+            padding: 16mm;
             text-align: center;
         }
         .header {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .header h1 {
             margin: 0;
-            font-size: 48px;
-            color: #000;
+            font-size: 56px;
             font-weight: bold;
         }
         .section {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             text-align: left;
         }
         .section-header {
-            font-size: 32px;
-            margin-bottom: 15px;
+            font-size: 44px;
+            margin-bottom: 24px;
             font-weight: bold;
-            color: #000;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 24px;
         }
         th, td {
-            padding: 10px;
-            border-bottom: 1px solid #000;
-            font-size: 24px;
-            font-weight: bold;
+            padding: 16px;
+            border-bottom: 2px solid #000;
+            font-size: 36px;
             text-align: center;
         }
         th {
             background-color: #f2f2f2;
-            color: #000;
         }
         .total-label {
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: bold;
+            font-size: 36px;
+            margin-bottom: 16px;
             text-align: left;
         }
     </style>
@@ -178,6 +171,7 @@ function printBill() {
     printWindow.document.close();
     printWindow.print();
 }
+
 
 function calculateChange() {
     let amountPaid = parseFloat(prompt('Enter amount paid:'));
