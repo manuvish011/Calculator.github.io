@@ -33,9 +33,9 @@ function updateTotals() {
     discountAmount = total * (discountPercentage / 100);  // Recalculate discount amount based on the new total
     let discountedTotal = total - discountAmount;
 
-    document.getElementById('subtotal').textContent = ₹${total.toFixed(2)};
-    document.getElementById('discount').textContent = ₹${discountAmount.toFixed(2)} (${discountPercentage}%);
-    document.getElementById('total').textContent = ₹${discountedTotal.toFixed(2)};
+    document.getElementById('subtotal').textContent = `₹${total.toFixed(2)}`;
+    document.getElementById('discount').textContent = `₹${discountAmount.toFixed(2)} (${discountPercentage}%)`;
+    document.getElementById('total').textContent = `₹${discountedTotal.toFixed(2)}`;
 }
 
 function updateItemList() {
@@ -47,11 +47,11 @@ function updateItemList() {
     billContent += "<tbody>";
     items.forEach((item, index) => {
         billContent += "<tr>";
-        billContent += <td>Product ${index + 1}</td>;
-        billContent += <td><input type="number" value="${item.price.toFixed(2)}" onchange="updateItemPrice(${index}, this.value)" class="form-control"></td>;
-        billContent += <td><input type="number" value="${item.quantity}" onchange="updateItemQuantity(${index}, this.value)" class="form-control"></td>;
-        billContent += <td>₹${item.total_price.toFixed(2)}</td>;
-        billContent += <td><button onclick="deleteItem(${index})" class="btn btn-danger">Delete</button></td>;
+        billContent += `<td>Product ${index + 1}</td>`;
+        billContent += `<td><input type="number" value="${item.price.toFixed(2)}" onchange="updateItemPrice(${index}, this.value)" class="form-control"></td>`;
+        billContent += `<td><input type="number" value="${item.quantity}" onchange="updateItemQuantity(${index}, this.value)" class="form-control"></td>`;
+        billContent += `<td>₹${item.total_price.toFixed(2)}</td>`;
+        billContent += `<td><button onclick="deleteItem(${index})" class="btn btn-danger">Delete</button></td>`;
         billContent += "</tr>";
     });
     billContent += "</tbody></table>";
@@ -186,7 +186,7 @@ function calculateChange() {
     let amountPaid = parseFloat(prompt('Enter amount paid:'));
     if (!isNaN(amountPaid)) {
         let change = amountPaid - (total - discountAmount);
-        alert(Change due: ₹${change.toFixed(2)});
+        alert(`Change due: ₹${change.toFixed(2)}`);
     } else {
         alert('Invalid input for amount paid.');
     }
