@@ -8,6 +8,7 @@ Welcome to the Retail Shop List Calculator project! This project provides a simp
 - Automatically calculate subtotal, total, and apply discounts
 - Clear the list or print the bill
 - Calculate change based on the amount paid
+- Delete item from the list 
 
 ## Technologies Used
 
