@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,33 +8,550 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --primary-color: #ff6666; /* Default */
+            --text-color: #ffffff;
+            --background-color: #121212;
+            --input-background: #333333;
+            --button-hover: #ff4d4d;
+            --card-background: #1f1f1f;
+            --border-color: #ff6666;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+
+          .color-toggle {
+    position: absolute;
+    top: -25px; /* Adjust this value to move the toggle button upwards */
+    right: 0;
+    font-size: 16px;
+    color: var(--primary-color);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+}
+
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .input-row label {
+            font-size: 14px;
+            font-weight: 400;
+            width: 30%;
+        }
+
+        .input-row input {
+            width: 65%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--input-background);
+            font-size: 16px;
+            background-color: var(--input-background);
+            color: var(--text-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover);
+        }
+
+        .list-box {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--input-background);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            background-color: var(--input-background);
+            color: var(--text-color);
+        }
+
+        .totals-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: var(--card-background);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .totals-container div {
+            text-align: center;
+            margin: 5px;
+            flex: 1;
+        }
+
+        .total-label {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .total-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .button-group button {
+            margin-bottom: 10px;
+            flex-basis: calc(33.333% - 10px); /* Original discount button size */
+        }
+
+        .button-group button.clear-btn {
+            flex-basis: 100%; /* Make the clear list button fill the entire row */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: var(--text-color);
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 2px solid #555555;
+            text-align: center;
+        }
+
+        th {
+            background-color: #444444;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            margin: 0 auto;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        .actions button {
+            margin-left: 5px;
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                padding: 16px;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .input-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .input-row label,
+            .input-row input {
+                width: 100%;
+            }
+
+            .btn {
+                padding: 10px 0;
+                font-size: 14px;
+            }
+
+            .list-box {
+                max-height: 150px;
+            }
+        }
+
+        #amountDialog {
+            display: none;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 20px;
+            border-radius: 6px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        #amountDialog .btn {
+            width: auto;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Muskan Beauty Touch</h1>
+            <select class="color-toggle" onchange="changeButtonColor(this.value)">
+                <option value="#ff6666">Red</option>
+                <option value="#4CAF50">Green</option>
+                <option value="#2196F3">Blue</option>
+                <option value="#FFC107">Amber</option>
+            </select>
         </header>
+        <button class="btn btn-primary" onclick="printBill()">Print Bill</button>
         <div class="input-row">
             <label for="price">Price:</label>
-            <input type="number" id="price" inputmode="numeric" pattern="[0-9]*" class="form-control">
+            <input type="number" id="price" inputmode="numeric" pattern="[0-9]*" min="0">
         </div>
         <div class="input-row">
             <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" inputmode="numeric" pattern="[0-9]*" class="form-control">
+            <input type="number" id="quantity" inputmode="numeric" pattern="[0-9]*" min="1">
         </div>
-        <button class="btn btn-primary" onclick="addItem()">Add Item</button>
+        <button class="btn btn-primary" onclick="calculateChange()">Calculate Change</button>
         <div class="list-box" id="itemList"></div>
-        <div class="total-label">Subtotal: ₹<span id="subtotal">0.00</span></div>
-        <div class="total-label">Total: ₹<span id="total">0.00</span></div>
-        <div class="total-label">Discount: ₹<span id="discount">0.00</span></div>
+
+        <!-- Totals Display -->
+        <div class="totals-container">
+            <div>
+                <div class="total-label">Subtotal</div>
+                <div class="total-value">₹<span id="subtotal">0.00</span></div>
+            </div>
+            <div>
+                <div class="total-label">Discount</div>
+                <div class="total-value">₹<span id="discount">0.00</span></div>
+            </div>
+            <div>
+                <div class="total-label">Total</div>
+                <div class="total-value">₹<span id="total">0.00</span></div>
+            </div>
+        </div>
+        
         <div class="button-group">
-            <button class="btn btn-primary" onclick="clearList()">Clear List</button>
-            <button class="btn btn-primary" onclick="printBill()">Print Bill</button>
-            <button class="btn btn-primary" onclick="calculateChange()">Calculate Change</button>
-            <button class="btn btn-primary" onclick="applyDiscount()">Apply Discount</button>
+            <button class="btn btn-primary" onclick="applyDiscount(0)">0% Discount</button>
+            <button class="btn btn-primary" onclick="applyDiscount(3)">3% Discount</button>
+            <button class="btn btn-primary" onclick="applyDiscount(5)">5% Discount</button>
+            <button class="btn btn-primary" onclick="applyDiscount(6)">6% Discount</button>
+            <button class="btn btn-primary" onclick="applyDiscount(8)">8% Discount</button>
+            <button class="btn btn-primary" onclick="applyDiscount(10)">10% Discount</button>
+            <button class="btn btn-primary clear-btn" onclick="clearList()">Clear List</button>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <!-- Custom Dialog for Amount Input -->
+    <div id="amountDialog">
+        <div class="input-row">
+            <label for="amountPaid">Amount Paid:</label>
+            <input type="number" id="amountPaid" inputmode="numeric" pattern="[0-9]*" min="0">
+        </div>
+        <button class="btn" onclick="confirmChange()">Confirm</button>
+    </div>
+
+    <script>
+        let items = JSON.parse(localStorage.getItem('items')) || [];
+        let total = 0;
+        let discountAmount = 0;
+        let discountPercentage = 0;
+
+        // Load items from localStorage on page load
+        window.onload = function() {
+            updateTotals();
+            updateItemList();
+            loadSavedColor();
+        };
+
+        function addItem() {
+            let priceInput = document.getElementById('price');
+            let quantityInput = document.getElementById('quantity');
+            let price = parseFloat(priceInput.value);
+            let quantity = parseInt(quantityInput.value);
+
+            if (!isNaN(price) && !isNaN(quantity) && price >= 0 && quantity > 0) {
+                let total_price = price * quantity;
+                items.push({ price: price, quantity: quantity, total_price: total_price });
+                localStorage.setItem('items', JSON.stringify(items)); // Save items to localStorage
+                updateTotals();
+                updateItemList();
+                priceInput.value = '';
+                quantityInput.value = '';
+                priceInput.focus();
+            } else {
+                alert('Invalid input for price or quantity.');
+            }
+        }
+
+        document.getElementById('price').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                document.getElementById('quantity').focus();
+            }
+        });
+
+        document.getElementById('quantity').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                addItem();
+            }
+        });
+
+        function updateTotals() {
+            total = items.reduce((sum, item) => sum + item.total_price, 0);
+            discountAmount = total * (discountPercentage / 100);
+            let discountedTotal = total - discountAmount;
+
+            document.getElementById('subtotal').textContent = total.toFixed(2);
+            document.getElementById('discount').textContent = `${discountAmount.toFixed(2)} (${discountPercentage}%)`;
+            document.getElementById('total').textContent = discountedTotal.toFixed(2);
+        }
+
+        function updateItemList() {
+            let itemList = document.getElementById('itemList');
+            itemList.innerHTML = '';
+
+            let billContent = "<table class='bill-table'>";
+            billContent += "<thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th>Actions</th></tr></thead>";
+            billContent += "<tbody>";
+            items.forEach((item, index) => {
+                billContent += "<tr>";
+                billContent += `<td>Product ${index + 1}</td>`;
+                billContent += `<td><input type="number" value="${item.price.toFixed(2)}" onchange="updateItemPrice(${index}, this.value)" class="form-control" min="0"></td>`;
+                billContent += `<td><input type="number" value="${item.quantity}" onchange="updateItemQuantity(${index}, this.value)" class="form-control" min="1"></td>`;
+                billContent += `<td>₹${item.total_price.toFixed(2)}</td>`;
+                billContent += `<td class="actions"><button onclick="deleteItem(${index})" class="btn btn-danger">Delete</button></td>`;
+                billContent += "</tr>";
+            });
+            billContent += "</tbody></table>";
+
+            itemList.innerHTML = billContent;
+        }
+
+        function deleteItem(index) {
+            items.splice(index, 1);
+            localStorage.setItem('items', JSON.stringify(items)); // Update localStorage
+            updateTotals();
+            updateItemList();
+        }
+
+        function clearList() {
+            items = [];
+            total = 0;
+            discountAmount = 0;
+            discountPercentage = 0;
+            localStorage.removeItem('items'); // Clear items from localStorage
+            document.getElementById('subtotal').textContent = '0.00';
+            document.getElementById('total').textContent = '0.00';
+            document.getElementById('discount').textContent = '0.00 (0%)';
+            updateItemList();
+        }
+
+        function printBill() {
+            let billContent = `
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #fff;
+                    color: #000;
+                    font-size: 36px;
+                }
+                .container {
+                    width: 90%;
+                    margin: 0 auto;
+                    padding: 16mm;
+                    text-align: center;
+                }
+                .header {
+                    margin-bottom: 30px;
+                }
+                .header h1 {
+                    margin: 0;
+                    font-size: 56px;
+                    font-weight: bold;
+                }
+                .section {
+                    margin-bottom: 30px;
+                    text-align: left;
+                }
+                .section-header {
+                    font-size: 44px;
+                    margin-bottom: 24px;
+                    font-weight: bold;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 24px;
+                }
+                th, td {
+                    padding: 16px;
+                    border-bottom: 2px solid #000;
+                    font-size: 36px;
+                    text-align: center;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                .total-label {
+                    font-size: 36px;
+                    margin-bottom: 16px;
+                    text-align: left;
+                }
+            </style>
+            <div class="container">
+                <div class="header">
+                    <h1>Muskan Beauty Touch</h1>
+                </div>
+                <div class="section">
+                    <div class="section-header">Items</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+            items.forEach((item, index) => {
+                billContent += `
+                    <tr>
+                        <td>Product ${index + 1}</td>
+                        <td>₹${item.price.toFixed(2)}</td>
+                        <td>${item.quantity}</td>
+                        <td>₹${item.total_price.toFixed(2)}</td>
+                    </tr>`;
+            });
+
+            let subtotal = total.toFixed(2);
+            let discountDisplay = discountAmount.toFixed(2);
+            let discountedTotal = total - discountAmount;
+            billContent += `
+                    </tbody>
+                </table>
+            </div>
+            <div class="section">
+                <div class="section-header">Total</div>
+                <div class="total-label">Subtotal: ₹${subtotal}</div>
+                <div class="total-label">Discount: ₹${discountDisplay}</div>
+                <div class="total-label">Total: ₹${discountedTotal.toFixed(2)}</div>
+            </div>
+        </div>`;
+
+            let printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print Bill</title>'); 
+            printWindow.document.write('</head><body>'); 
+            printWindow.document.write(billContent);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function calculateChange() {
+            document.getElementById('amountDialog').style.display = 'block';
+        }
+
+        function confirmChange() {
+            let amountPaidInput = document.getElementById('amountPaid');
+            let amountPaid = parseFloat(amountPaidInput.value);
+            if (!isNaN(amountPaid)) {
+                let change = amountPaid - (total - discountAmount);
+                alert(`Change due: ₹${change.toFixed(2)}`);
+            } else {
+                alert('Invalid input for amount paid.');
+            }
+            document.getElementById('amountDialog').style.display = 'none';
+            amountPaidInput.value = '';
+        }
+
+        function applyDiscount(percent) {
+            discountPercentage = percent;
+            updateTotals();
+        }
+
+        function updateItemPrice(index, price) {
+            items[index].price = parseFloat(price);
+            items[index].total_price = items[index].price * items[index].quantity;
+            localStorage.setItem('items', JSON.stringify(items)); // Update localStorage
+            updateTotals();
+            updateItemList();
+        }
+
+        function updateItemQuantity(index, quantity) {
+            items[index].quantity = parseInt(quantity);
+            items[index].total_price = items[index].price * items[index].quantity;
+            localStorage.setItem('items', JSON.stringify(items)); // Update localStorage
+            updateTotals();
+            updateItemList();
+        }
+
+        function changeButtonColor(color) {
+            document.documentElement.style.setProperty('--primary-color', color);
+            document.documentElement.style.setProperty('--button-hover', shadeColor(color, -20));
+            document.documentElement.style.setProperty('--border-color', color);
+            localStorage.setItem('buttonColor', color);
+        }
+
+        function loadSavedColor() {
+            const savedColor = localStorage.getItem('buttonColor');
+            if (savedColor) {
+                changeButtonColor(savedColor);
+                document.querySelector('.color-toggle').value = savedColor;
+            }
+        }
+
+        function shadeColor(color, percent) {
+            var num = parseInt(color.replace("#", ""), 16),
+                amt = Math.round(2.55 * percent),
+                R = (num >> 16) + amt,
+                G = (num >> 8 & 0x00FF) + amt,
+                B = (num & 0x0000FF) + amt;
+            return "#" + (0x1000000 + (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 + (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 + (B < 255 ? (B < 1 ? 0 : B) : 255)).toString(16).slice(1);
+        }
+    </script>
 </body>
 </html>
